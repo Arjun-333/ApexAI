@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-primary: #a3ff12; /* Electric Lime */
+  --color-secondary: #00f0ff; /* Cyan Pulse */
+  --color-accent: #ff007a; /* Neon Pink */
+  --color-background: #050505;
+  --color-surface: #0a0a0a;
+  --color-surface-hover: #121212;
+  --color-foreground: #ffffff;
+  
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+:root {
+  --background: #050505;
+  --foreground: #ffffff;
+  --surface: #0a0a0a;
+  --primary: #a3ff12;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.01em;
+}
+
+/* Elite Cyber-Utilitarian Surfaces */
+@utility surface-card {
+  background-color: var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 0.5rem; /* Sharper corners */
+  padding: 1.5rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@utility surface-card-hover {
+  @apply surface-card hover:border-primary/40 hover:shadow-[0_0_15px_rgba(163,255,18,0.1)];
+}
+
+/* Glowing Elements */
+@utility glow-border-primary {
+  border: 1px solid var(--primary);
+  shadow: 0 0 10px rgba(163, 255, 18, 0.2);
+}
+
+@utility glow-text-primary {
+  text-shadow: 0 0 8px rgba(163, 255, 18, 0.4);
+}
+
+/* Structured Borders */
+@utility border-subtle {
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Gradient Text - High Contrast */
+@utility text-gradient {
+  background: linear-gradient(90deg, #ffffff 0%, #a3ff12 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Typography Extensions */
+.brand-tracking {
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+/* Custom Scrollbar - Minimal */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1a1a1a;
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
