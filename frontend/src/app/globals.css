@@ -13,27 +13,100 @@
 }
 
 :root {
-  --background: #050505;
-  --foreground: #ffffff;
-  --surface: #0a0a0a;
-  --primary: #a3ff12;
+  /* Design Tokens - Optimized Fluidity */
+  --space-unit: clamp(1rem, 2vw, 2.5rem);
+  --page-padding: clamp(1.5rem, 5vw, 4rem);
+  --radius-tactical: var(--border-radius, 4px);
+
+  /* Default: Apex Theme (Lime) */
+  --primary-raw: 163 255 18;
+  --primary: var(--primary-raw);
+  --primary-glow: var(--primary-raw) / 0.4;
+  --background: 5 5 5;
+  --card: 10 10 10;
+  --card-border: 255 255 255 / 0.05;
+  --foreground: 255 255 255;
+  --text-muted: 255 255 255 / 0.4;
+  --scan-line: var(--primary-raw) / 0.15;
+  --glass-opacity: 0.05;
+  --border-radius: 4px;
+}
+
+[data-stealth='true'] {
+  /* Stealth Mode: Low-Contrast, Desaturated Signature */
+  filter: saturate(0.4) contrast(0.9);
+  --primary-raw: 140 160 140; /* Muted Sage */
+  --primary-glow: 140 160 140 / 0.2;
+}
+
+[data-theme='chernobyl'] {
+  --primary-raw: 255 180 0;
+  --background: 18 20 18;
+  --card: 25 28 25;
+  --card-border: 60 70 60 / 0.3;
+  --foreground: 245 245 235;
+  --text-muted: 255 255 255 / 0.25;
+  --scan-line: 255 180 0 / 0.08;
+  --glass-opacity: 0.02;
+  --border-radius: 2px;
+}
+
+[data-theme='nuorbit'] {
+  --primary-raw: 0 240 255;
+  --background: 3 6 18;
+  --card: 12 18 35 / 0.6;
+  --card-border: 0 240 255 / 0.2;
+  --foreground: 240 255 255;
+  --text-muted: 200 240 255 / 0.4;
+  --scan-line: 0 240 255 / 0.25;
+  --glass-opacity: 0.4;
+  --border-radius: 12px;
+}
+
+@theme {
+  --color-background: rgb(var(--background));
+  --color-foreground: rgb(var(--foreground));
+  --color-primary: rgb(var(--primary-raw));
+  --color-card: rgb(var(--card));
+  --color-secondary: rgb(0 240 255);
+  --color-accent: rgb(255 0 122);
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
+  background-color: rgb(var(--background));
+  color: rgb(var(--foreground));
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   letter-spacing: -0.01em;
+  padding: 0;
+  margin: 0;
+}
+
+.space-y-10 > * + * {
+  margin-top: var(--space-unit);
+}
+
+/* Hide Spinners for cleaner UI */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  appearance: none;
+  -moz-appearance: textfield;
 }
 
 /* Elite Cyber-Utilitarian Surfaces */
 @utility surface-card {
-  background-color: var(--surface);
-  border: 1px solid rgba(255, 255, 255, 0.03);
-  border-radius: 0.5rem; /* Sharper corners */
-  padding: 1.5rem;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: rgb(var(--card));
+  border: 1px solid rgb(var(--card-border));
+  border-radius: var(--radius-tactical);
+  padding: var(--space-unit);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(calc(var(--glass-opacity) * 20px));
 }
 
 @utility surface-card-hover {
@@ -42,12 +115,12 @@ body {
 
 /* Glowing Elements */
 @utility glow-border-primary {
-  border: 1px solid var(--primary);
-  shadow: 0 0 10px rgba(163, 255, 18, 0.2);
+  border: 1px solid rgb(var(--primary));
+  box-shadow: 0 0 10px rgb(var(--primary-glow));
 }
 
 @utility glow-text-primary {
-  text-shadow: 0 0 8px rgba(163, 255, 18, 0.4);
+  text-shadow: 0 0 8px rgb(var(--primary-glow));
 }
 
 /* Structured Borders */
@@ -57,12 +130,39 @@ body {
 
 /* Gradient Text - High Contrast */
 @utility text-gradient {
-  background: linear-gradient(90deg, #ffffff 0%, #a3ff12 100%);
+  background: linear-gradient(90deg, rgb(var(--foreground)) 0%, rgb(var(--primary)) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 /* Typography Extensions */
+@keyframes loading-bar {
+  0% { transform: scaleX(0); opacity: 0; }
+  10% { opacity: 1; }
+  50% { transform: scaleX(0.7); }
+  100% { transform: scaleX(1); opacity: 0; }
+}
+
+@keyframes scan {
+  0% { top: -10%; opacity: 0; }
+  50% { opacity: 0.5; }
+  100% { top: 110%; opacity: 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0); opacity: 0.2; }
+  33% { transform: translate(10px, -20px); opacity: 0.5; }
+  66% { transform: translate(-10px, 10px); opacity: 0.3; }
+}
+
+.animate-scan {
+  animation: scan 8s linear infinite;
+}
+
+.animate-float {
+  animation: float 15s ease-in-out infinite;
+}
+
 .brand-tracking {
     letter-spacing: 0.2em;
     text-transform: uppercase;

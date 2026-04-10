@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { ArrowRight, ArrowLeft, Check, Dumbbell, Target, User, Ruler, Weight } from "lucide-react";
+import SystemLoader from "@/components/SystemLoader";
 import { api } from "@/lib/api";
 
 export default function OnboardingPage() {

@@ -3,8 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 from dotenv import load_dotenv
 
-from database import engine, Base
-from routers import auth
+from .database import engine, Base
+from .routers import auth, users, workout, nutrition, ai
 
 load_dotenv()
 
@@ -14,7 +14,7 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI(title="ApexAI Fitness Assistant API")
 
 # CORS configuration
-ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
+ALLOWED_ORIGINS = [origin.strip().strip('"') for origin in os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",")]
 
 app.add_middleware(
     CORSMiddleware,

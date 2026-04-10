@@ -1,14 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-import sys
-import os
 
-# Add parent directory to path to allow relative imports
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-
-from database import get_db
-import models, schemas, auth
+from ..database import get_db
+from .. import models, schemas, auth as auth_utils
 from ai.recommender import generate_workout_plan
 
 router = APIRouter(
@@ -19,7 +13,7 @@ router = APIRouter(
 @router.get("/plan", response_model=schemas.WorkoutPlan)
 def get_personal_plan(
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(auth.get_current_user)
+    current_user: models.User = Depends(auth_utils.get_current_user)
 ):
     # Check if user already has a plan
     plan = db.query(models.WorkoutPlan).filter(models.WorkoutPlan.user_id == current_user.id).order_by(models.WorkoutPlan.created_at.desc()).first()
@@ -53,7 +47,7 @@ def get_personal_plan(
 def log_session(
     log: schemas.ProgressLogCreate,
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(auth.get_current_user)
+    current_user: models.User = Depends(auth_utils.get_current_user)
 ):
     new_log = models.ProgressLog(
         user_id=current_user.id,

@@ -10,36 +10,50 @@ import {
   Calendar,
   ChevronRight,
   TrendingUp,
-  Activity
+  Activity,
+  Settings
 } from "lucide-react";
+import Image from "next/image";
+import ThemeSwitcher from "@/components/ThemeSwitcher";
+import { VitalSignsWidget } from "@/components/VitalSignsWidget";
+import { SquadLeaderboard } from "@/components/SquadLeaderboard";
+import { MissionChallenges } from "@/components/MissionChallenges";
+import { MuscleFatigueMap } from "@/components/MuscleFatigueMap";
+import { MetabolicPredictor } from "@/components/MetabolicPredictor";
+
+import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 export default function DashboardPage() {
-  const [profile, setProfile] = useState<any>(null);
-  const [workoutPlan, setWorkoutPlan] = useState<any>(null);
-  const [nutritionPlan, setNutritionPlan] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
+  // Atomized Data Handshakes
+  const { data: profile, isLoading: profileLoading } = useQuery({
+    queryKey: ["userProfile"],
+    queryFn: () => api.user.getProfile(),
+  });
+
+  const { data: workoutPlan, isLoading: workoutLoading } = useQuery({
+    queryKey: ["workoutPlan"],
+    queryFn: () => api.workout.getPlan(),
+  });
+
+  const { data: nutritionPlan, isLoading: nutritionLoading } = useQuery({
+    queryKey: ["nutritionPlan"],
+    queryFn: () => api.nutrition.getPlan(),
+  });
+
+  // Auth Guard Protocol
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [prof, wp, np] = await Promise.all([
-          api.user.getProfile(),
-          api.workout.getPlan(),
-          api.nutrition.getPlan()
-        ]);
-        setProfile(prof);
-        setWorkoutPlan(wp);
-        setNutritionPlan(np);
-      } catch (err) {
-        console.error("Error fetching dashboard data", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+    const token = localStorage.getItem("apex_token");
+    if (!token) {
+      router.push("/login?error=auth_handshake_failed");
+    }
+  }, [router]);
 
-  if (loading) {
+  const isLoading = profileLoading || workoutLoading || nutritionLoading;
+
+  if (isLoading) {
     return (
       <div className="space-y-8 animate-pulse">
         <div className="h-12 w-48 bg-white/5 rounded-xl"></div>
@@ -57,9 +71,20 @@ export default function DashboardPage() {
   return (
     <div className="space-y-10">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <div>
-          <h2 className="text-white/20 font-bold uppercase tracking-[0.2em] text-[10px] mb-1">Performance System // Overview</h2>
-          <h1 className="text-5xl font-black tracking-tight uppercase">User <span className="text-gradient">Session</span></h1>
+        <div className="flex items-center gap-6">
+          <div className="relative w-14 h-14 opacity-80 filter drop-shadow-[0_0_8px_rgb(var(--primary))]">
+            <Image 
+              src="/logo.png" 
+              alt="Apex Logo" 
+              fill 
+              className="object-contain"
+              priority
+            />
+          </div>
+          <div>
+            <h2 className="text-white/20 font-bold uppercase tracking-[0.3em] text-[10px] mb-1">Performance System // Overview</h2>
+            <h1 className="text-5xl font-black tracking-tight uppercase">Session <span className="text-primary drop-shadow-[0_0_8px_rgb(var(--primary-glow))]">Log</span></h1>
+          </div>
         </div>
         <div className="flex items-center gap-4 bg-white/5 px-6 py-3 rounded-2xl border border-white/5">
             <Calendar size={18} className="text-primary" />
@@ -67,35 +92,64 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="surface-card flex items-center gap-6">
-          <div className="w-16 h-16 rounded-2xl bg-primary/20 flex items-center justify-center text-primary">
-            <Flame size={32} />
+      {/* Command Center Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        {/* Primary Health Cluster - 8 Columns */}
+        <div className="lg:col-span-8 space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <VitalSignsWidget />
+            <MetabolicPredictor />
           </div>
-          <div>
-            <p className="text-white/40 text-sm font-bold uppercase tracking-wider">Calorie Target</p>
-            <p className="text-3xl font-black">{nutritionPlan?.daily_calories || 2500}<span className="text-sm text-white/40 font-medium ml-1">kcal</span></p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <MuscleFatigueMap />
+            {/* AI Module - Tactical Re-integration */}
+            <div className="surface-card border-primary/20 flex flex-col items-center justify-center p-8 text-center min-h-[300px] group">
+              <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-4 group-hover:bg-primary/20 transition-all">
+                <Flame size={32} className="animate-pulse" />
+              </div>
+              <h4 className="text-xs font-black text-white uppercase mb-2 tracking-widest leading-none">Neural AI Assistant</h4>
+              <p className="text-[10px] text-white/40 uppercase leading-relaxed max-w-[200px] mt-2">
+                Awaiting mission parameters. Tactical analysis mode available.
+              </p>
+              <button className="mt-6 px-6 py-2 border border-primary/40 text-[9px] font-black text-primary uppercase hover:bg-primary hover:text-black transition-colors tracking-widest">
+                Initialize Protocol
+              </button>
+            </div>
           </div>
         </div>
 
-        <div className="surface-card flex items-center gap-6">
-          <div className="w-16 h-16 rounded-2xl bg-secondary/20 flex items-center justify-center text-secondary">
-            <Activity size={32} />
+        {/* Tactical Intel Cluster - 4 Columns */}
+        <div className="lg:col-span-4 space-y-8">
+          <SquadLeaderboard />
+          <MissionChallenges />
+          
+          {/* Calorie Node - Integrated */}
+          <div className="surface-card border-primary/20 flex items-center justify-between p-6">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center text-primary">
+                <Flame size={24} />
+              </div>
+              <div>
+                <span className="block text-[8px] font-bold text-white/20 uppercase tracking-widest leading-none mb-1">Daily Target</span>
+                <span className="text-2xl font-black text-white tabular-nums">{nutritionPlan?.daily_calories || 2500} <span className="text-[10px] text-white/40">KCAL</span></span>
+              </div>
+            </div>
+            <div className="text-right">
+              <span className="text-xs font-black text-primary uppercase tracking-tighter">Plan Active</span>
+              <span className="block text-[8px] font-bold text-white/10 uppercase mt-1">Status</span>
+            </div>
           </div>
-          <div>
-            <p className="text-white/40 text-sm font-bold uppercase tracking-wider">Current Weight</p>
-            <p className="text-3xl font-black">{profile?.weight_kg}<span className="text-sm text-white/40 font-medium ml-1">kg</span></p>
-          </div>
-        </div>
 
-        <div className="surface-card flex items-center gap-6">
-          <div className="w-16 h-16 rounded-2xl bg-accent/20 flex items-center justify-center text-accent">
-            <Target size={32} />
-          </div>
-          <div>
-            <p className="text-white/40 text-sm font-bold uppercase tracking-wider">Fitness Goal</p>
-            <p className="text-lg font-bold leading-tight line-clamp-2">{profile?.fitness_goal}</p>
+          <div className="surface-card flex items-center gap-6 border-white/5 opacity-60">
+            <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center text-accent">
+              <Target size={24} />
+            </div>
+            <div>
+              <p className="text-white/20 text-[8px] font-black uppercase tracking-widest mb-1">Current Objective</p>
+              <p className="text-xs font-bold leading-tight line-clamp-2 uppercase">{profile?.fitness_goal}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -152,6 +206,14 @@ export default function DashboardPage() {
                 </button>
             </div>
         </div>
+      </div>
+
+      {/* Interface Configuration */}
+      <div className="mt-12">
+        <h3 className="text-[10px] font-black brand-tracking uppercase text-white/20 mb-4 ml-1 flex items-center gap-2">
+          <Settings size={12} /> Interface Protocol
+        </h3>
+        <ThemeSwitcher />
       </div>
     </div>
   );

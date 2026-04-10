@@ -77,9 +77,32 @@ def generate_workout_plan(user_profile: Dict[str, Any]) -> Dict[str, Any]:
         )
         return json.loads(response.choices[0].message.content)
     except Exception:
-        # Fallback to Llama 3
-        content = call_llama3(messages, response_format="json_object")
-        return json.loads(content)
+        try:
+            # Fallback to Llama 3
+            content = call_llama3(messages, response_format="json_object")
+            return json.loads(content)
+        except Exception:
+            # Final Static Fallback: ELITE OPERATIVE PROTOTYPE
+            logger.warning("All AI providers failed. Returning Static Elite Plan.")
+            return {
+                "plan_name": "APEX ALPHA PROTOCOL (FALLBACK)",
+                "weeks": [
+                    {
+                        "week_number": 1,
+                        "days": [
+                            {
+                                "day_name": "Monday",
+                                "focus": "Hypertrophy / Neural Sync",
+                                "exercises": [
+                                    { "name": "Compound Lift A", "sets": "4", "reps": "8-10", "notes": "Maximize explosive power." },
+                                    { "name": "Accessory B", "sets": "3", "reps": "12", "notes": "Focus on control." }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "general_advice": "Maintain hydration. Monitor neural anchors."
+            }
 
 def generate_nutrition_plan(user_profile: Dict[str, Any]) -> Dict[str, Any]:
     prompt = f"""
@@ -114,9 +137,19 @@ def generate_nutrition_plan(user_profile: Dict[str, Any]) -> Dict[str, Any]:
         )
         return json.loads(response.choices[0].message.content)
     except Exception:
-        # Fallback to Llama 3
-        content = call_llama3(messages, response_format="json_object")
-        return json.loads(content)
+        try:
+            # Fallback to Llama 3
+            content = call_llama3(messages, response_format="json_object")
+            return json.loads(content)
+        except Exception:
+            # Final Static Fallback: ELITE NUTRITION
+            return {
+                "daily_calories": 2800,
+                "protein_g": 210,
+                "carbs_g": 350,
+                "fats_g": 80,
+                "advice": "Strategic macro-cycling enabled. Focus on nutrient density."
+            }
 
 def get_ai_chat_response(query: str, history: list) -> str:
     messages = [
@@ -134,4 +167,7 @@ def get_ai_chat_response(query: str, history: list) -> str:
         )
         return response.choices[0].message.content
     except Exception:
-        return call_llama3(messages)
+        try:
+            return call_llama3(messages)
+        except Exception:
+            return "SIGNAL_LOST: AI services are currently unmasked or unavailable. Proceed with manual parameters."
