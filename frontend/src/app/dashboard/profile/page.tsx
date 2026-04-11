@@ -12,6 +12,7 @@ import {
   CheckCircle,
   Loader2
 } from "lucide-react";
+import { SyncCenter } from "@/components/SyncCenter";
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState<any>(null);
@@ -162,6 +163,10 @@ export default function ProfilePage() {
                 )}
             </button>
         </form>
+      </div>
+
+      <div className="pt-10 border-t border-white/5">
+        <SyncCenter />
       </div>
     </div>
   );

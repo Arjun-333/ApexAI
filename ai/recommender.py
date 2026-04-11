@@ -85,7 +85,8 @@ def generate_workout_plan(user_profile: Dict[str, Any]) -> Dict[str, Any]:
             # Final Static Fallback: ELITE OPERATIVE PROTOTYPE
             logger.warning("All AI providers failed. Returning Static Elite Plan.")
             return {
-                "plan_name": "APEX ALPHA PROTOCOL (FALLBACK)",
+                "plan_name": "APEX ALPHA PROTOCOL (FALLBACK ACTIVE)",
+                "is_fallback": True,
                 "weeks": [
                     {
                         "week_number": 1,
@@ -148,6 +149,7 @@ def generate_nutrition_plan(user_profile: Dict[str, Any]) -> Dict[str, Any]:
                 "protein_g": 210,
                 "carbs_g": 350,
                 "fats_g": 80,
+                "is_fallback": True,
                 "advice": "Strategic macro-cycling enabled. Focus on nutrient density."
             }
 
@@ -170,4 +172,4 @@ def get_ai_chat_response(query: str, history: list) -> str:
         try:
             return call_llama3(messages)
         except Exception:
-            return "SIGNAL_LOST: AI services are currently unmasked or unavailable. Proceed with manual parameters."
+            return "SIGNAL_LOST: Fallback AI services unavailable. Manual parameters required."

@@ -20,6 +20,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Apex | Neural Fitness Interface",
   description: "Elite performance tracking and nutritional synchronization",
+  icons: {
+    icon: "/logo.png",
+  },
 };
 
 export default function RootLayout({

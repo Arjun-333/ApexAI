@@ -33,10 +33,21 @@
 }
 
 [data-stealth='true'] {
-  /* Stealth Mode: Low-Contrast, Desaturated Signature */
-  filter: saturate(0.4) contrast(0.9);
-  --primary-raw: 140 160 140; /* Muted Sage */
-  --primary-glow: 140 160 140 / 0.2;
+  /* Stealth Mode: Precision Token Shifts, Not Lazy Filtration */
+  --primary-raw: 120 180 120; /* Muted Tactical Green */
+  --primary-glow: 120 180 120 / 0.15;
+  --foreground: 220 220 220;
+  --text-muted: 220 220 220 / 0.3;
+  --background: 10 12 10;
+  --card: 15 18 15;
+  --card-border: 255 255 255 / 0.03;
+}
+
+/* Degraded Connection Spectrum */
+[data-degraded='true'] {
+  --primary-raw: 255 100 0; /* Urgent Amber */
+  --primary-glow: 255 100 0 / 0.3;
+  --degraded-accent: 255 50 0;
 }
 
 [data-theme='chernobyl'] {
@@ -106,7 +117,6 @@ input[type=number] {
   border-radius: var(--radius-tactical);
   padding: var(--space-unit);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  backdrop-filter: blur(calc(var(--glass-opacity) * 20px));
 }
 
 @utility surface-card-hover {

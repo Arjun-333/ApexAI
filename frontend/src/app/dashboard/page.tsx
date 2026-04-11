@@ -11,7 +11,8 @@ import {
   ChevronRight,
   TrendingUp,
   Activity,
-  Settings
+  Settings,
+  ShieldAlert
 } from "lucide-react";
 import Image from "next/image";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
@@ -27,31 +28,23 @@ import { useRouter } from "next/navigation";
 export default function DashboardPage() {
   const router = useRouter();
 
-  // Atomized Data Handshakes
-  const { data: profile, isLoading: profileLoading } = useQuery({
+  const { data: profile, isLoading: profileLoading, isError: profileError } = useQuery({
     queryKey: ["userProfile"],
     queryFn: () => api.user.getProfile(),
   });
 
-  const { data: workoutPlan, isLoading: workoutLoading } = useQuery({
+  const { data: workoutPlan, isLoading: workoutLoading, isError: workoutError } = useQuery({
     queryKey: ["workoutPlan"],
     queryFn: () => api.workout.getPlan(),
   });
 
-  const { data: nutritionPlan, isLoading: nutritionLoading } = useQuery({
+  const { data: nutritionPlan, isLoading: nutritionLoading, isError: nutritionError } = useQuery({
     queryKey: ["nutritionPlan"],
     queryFn: () => api.nutrition.getPlan(),
   });
 
-  // Auth Guard Protocol
-  useEffect(() => {
-    const token = localStorage.getItem("apex_token");
-    if (!token) {
-      router.push("/login?error=auth_handshake_failed");
-    }
-  }, [router]);
-
   const isLoading = profileLoading || workoutLoading || nutritionLoading;
+  const isDegraded = workoutPlan?.is_fallback || nutritionPlan?.is_fallback || workoutError || nutritionError || profileError;
 
   if (isLoading) {
     return (
@@ -69,7 +62,16 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-10" data-degraded={isDegraded ? 'true' : 'false'}>
+      {isDegraded && (
+        <div className="bg-amber-500/10 border border-amber-500/20 p-4 rounded-xl flex items-center gap-4 animate-pulse">
+          <ShieldAlert className="text-amber-500" size={20} />
+          <div>
+            <p className="text-[10px] font-black text-amber-500 uppercase tracking-widest">Degraded Connection Detected</p>
+            <p className="text-[9px] text-amber-500/60 uppercase">System is running on static neural fallbacks. Live tracking may be limited.</p>
+          </div>
+        </div>
+      )}
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div className="flex items-center gap-6">
           <div className="relative w-14 h-14 opacity-80 filter drop-shadow-[0_0_8px_rgb(var(--primary))]">

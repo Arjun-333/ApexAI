@@ -1,8 +1,26 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const BackgroundAtmosphere = () => {
+  const [particles, setParticles] = useState<{ id: number, style: any }[]>([]);
+
+  useEffect(() => {
+    // Generate randomized particles only on client-side to prevent hydration mismatch
+    const newParticles = [...Array(20)].map((_, i) => ({
+      id: i,
+      style: {
+        width: Math.random() * 3 + 'px',
+        height: Math.random() * 3 + 'px',
+        left: Math.random() * 100 + '%',
+        top: Math.random() * 100 + '%',
+        animationDuration: (Math.random() * 10 + 10) + 's',
+        animationDelay: (Math.random() * -20) + 's',
+      }
+    }));
+    setParticles(newParticles);
+  }, []);
+
   return (
     <div className="fixed inset-0 z-[-1] overflow-hidden pointer-events-none bg-[#050505]">
       {/* Dynamic Grid System */}
@@ -28,18 +46,11 @@ const BackgroundAtmosphere = () => {
 
       {/* Floating Tactical Particles */}
       <div className="absolute inset-0 overflow-hidden">
-        {[...Array(20)].map((_, i) => (
+        {particles.map((p) => (
           <div
-            key={i}
+            key={p.id}
             className="absolute rounded-full bg-primary/20 animate-float"
-            style={{
-              width: Math.random() * 3 + 'px',
-              height: Math.random() * 3 + 'px',
-              left: Math.random() * 100 + '%',
-              top: Math.random() * 100 + '%',
-              animationDuration: (Math.random() * 10 + 10) + 's',
-              animationDelay: (Math.random() * -20) + 's',
-            }}
+            style={p.style}
           />
         ))}
       </div>

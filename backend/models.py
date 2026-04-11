@@ -15,6 +15,8 @@ class User(Base):
     weight_kg = Column(Float)
     height_cm = Column(Float)
     fitness_goal = Column(Text)
+    biometric_source = Column(String) # For 'garmin', 'whoop', etc.
+    sync_active = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     workout_plans = relationship("WorkoutPlan", back_populates="user")

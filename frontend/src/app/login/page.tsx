@@ -10,6 +10,13 @@ import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { useNeuralCommander } from "@/hooks/useNeuralCommander";
 import { useEffect } from "react";
 
+const b64EncodeUnicode = (str: string) => {
+  return btoa(encodeURI(str).replace(/%([0-9A-F]{2})/g,
+    function(match, p1) {
+      return String.fromCharCode(parseInt(p1, 16));
+  }));
+};
+
 export default function LoginPage() {
   const { transmit } = useNeuralCommander();
   const [email, setEmail] = useState("");
@@ -35,8 +42,18 @@ export default function LoginPage() {
       const data = await api.auth.login(formData);
       if (data.access_token) {
         localStorage.setItem("token", data.access_token);
-        // Simulate JWT Handshake
-        localStorage.setItem("apex_token", "oper-tier-alpha-" + Date.now());
+        
+        // Signed (Mock) Handshake Protocol
+        const payload = b64EncodeUnicode(JSON.stringify({
+          sub: "oper-tier-alpha",
+          exp: Date.now() + 86400000,
+          sig: "apex-hardened-v4.1"
+        }));
+        
+        const token = `oper.${payload}.sync`;
+        localStorage.setItem("apex_token", token);
+        document.cookie = `apex_token=${token}; path=/; max-age=86400; SameSite=Strict`;
+        
         router.push("/dashboard");
       } else {
         setError(data.detail || "Invalid login credentials");
