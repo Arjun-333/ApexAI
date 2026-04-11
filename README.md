@@ -11,12 +11,6 @@
 [![AI Powered](https://img.shields.io/badge/AI-GPT--4o--mini-412991?style=for-the-badge&logo=openai)](https://openai.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-a3ff12?style=for-the-badge)](LICENSE)
 
----
-
-<img src="docs/screenshots/dashboard.png" alt="ApexAI Dashboard" width="700"/>
-
-*Command Center — Real-time biometric telemetry, squad rankings, and strategic challenges*
-
 </div>
 
 ---
@@ -35,7 +29,7 @@ It uses **OpenAI GPT-4o-mini** (with a local **Llama 3** fallback via Ollama) to
 
 ### Neural Authorization
 
-<img src="docs/screenshots/login.png" alt="Login Page" width="400"/>
+<img src="docs/screenshots/login_v3.png" alt="Login Page" width="400"/>
 
 *Secure authentication with JWT tokens and a multi-theme Visual Spectrum selector*
 
@@ -43,7 +37,7 @@ It uses **OpenAI GPT-4o-mini** (with a local **Llama 3** fallback via Ollama) to
 
 ### Nutritional Plan
 
-<img src="docs/screenshots/nutrition.png" alt="Nutrition Dashboard" width="700"/>
+<img src="docs/screenshots/nutrition_v3.png" alt="Nutrition Dashboard" width="700"/>
 
 *AI-calculated calorie and macro targets with dietary guidance*
 
@@ -51,17 +45,9 @@ It uses **OpenAI GPT-4o-mini** (with a local **Llama 3** fallback via Ollama) to
 
 ### AI Assistant — Neural Interface
 
-<img src="docs/screenshots/ai_chat.png" alt="AI Chat Interface" width="700"/>
+<img src="docs/screenshots/ai_chat_v3.png" alt="AI Chat Interface" width="700"/>
 
 *Context-aware fitness assistant with image-based meal analysis (Neural Vision Protocol)*
-
----
-
-### Neural Vision Protocol
-
-<img src="docs/screenshots/ai_assistant.png" alt="AI Vision" width="700"/>
-
-*Send a photo of your meal and get instant nutritional breakdown*
 
 </div>
 
