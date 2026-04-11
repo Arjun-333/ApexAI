@@ -26,7 +26,7 @@ def call_llama3(messages: List[Dict[str, str]], response_format: str = "text") -
             "stream": False,
             "format": "json" if response_format == "json_object" else ""
         }
-        response = requests.post(OLLAMA_URL, json=payload, timeout=30)
+        response = requests.post(OLLAMA_URL, json=payload, timeout=5)
         response.raise_for_status()
         return response.json()["message"]["content"]
     except Exception as e:

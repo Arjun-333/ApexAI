@@ -18,7 +18,7 @@ ALLOWED_ORIGINS = [origin.strip().strip('"') for origin in os.getenv("ALLOWED_OR
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

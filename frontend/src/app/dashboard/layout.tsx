@@ -71,6 +71,14 @@ export default function DashboardLayout({
             <LogOut size={20} />
             Logout
           </button>
+          <div className="mt-4 px-4 pt-4 border-t border-white/5 opacity-20 group">
+              <p className="text-[9px] font-black uppercase tracking-[0.2em] brand-tracking text-white/40 group-hover:text-primary transition-colors">
+                  Engineered by Arjun
+              </p>
+              <p className="text-[7px] font-bold uppercase tracking-widest text-white/20 mt-1">
+                  v5.4 // Neural Collective
+              </p>
+          </div>
         </div>
       </aside>
 

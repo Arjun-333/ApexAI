@@ -35,8 +35,8 @@ def get_nutrition_target(
                 carbs_g=ai_data["carbs_g"],
                 fats_g=ai_data["fats_g"]
             )
-            db.commit()
             db.add(new_plan)
+            db.commit()
             db.refresh(new_plan)
             return new_plan
         except Exception as e:

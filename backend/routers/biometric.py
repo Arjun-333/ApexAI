@@ -13,7 +13,7 @@ def get_db():
     finally:
         db.close()
 
-@APIRouter.post("/sync/{provider}")
+@router.post("/sync/{provider}")
 async def start_sync(provider: str, db: Session = Depends(get_db)):
     # Mocking the OAuth Handshake
     if provider not in ["garmin", "whoop", "apple_health"]:
@@ -22,7 +22,7 @@ async def start_sync(provider: str, db: Session = Depends(get_db)):
     # In a real scenario, we would return the OAuth URL
     return {"message": f"Redirecting to {provider} authentication...", "auth_url": f"https://{provider}.com/oauth/authorize"}
 
-@APIRouter.get("/status")
+@router.get("/status")
 async def get_sync_status(db: Session = Depends(get_db)):
     # Mock status check
     return {
@@ -31,7 +31,7 @@ async def get_sync_status(db: Session = Depends(get_db)):
         "last_sync": "2026-04-11T20:00:00Z"
     }
 
-@APIRouter.get("/vitals")
+@router.get("/vitals")
 async def get_live_vitals():
     # This endpoint would poll the actual device API
     # Currently returning randomized tactical drift for high-fidelity simulation
