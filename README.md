@@ -29,7 +29,7 @@ It uses **OpenAI GPT-4o-mini** (with a local **Llama 3** fallback via Ollama) to
 
 ### Neural Authorization
 
-<img src="docs/screenshots/login_v3.png" alt="Login Page" width="400"/>
+<img src="docs/screenshots/login_v4.png" alt="Login Page" width="400"/>
 
 *Secure authentication with JWT tokens and a multi-theme Visual Spectrum selector*
 
